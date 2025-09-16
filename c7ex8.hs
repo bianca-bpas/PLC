@@ -1,0 +1,1 @@
+prodIntervalo :: Int -> Int -> [Int]
