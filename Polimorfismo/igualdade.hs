@@ -8,10 +8,10 @@ member (a:as) b = (a == b) || member as b
 ehIgual :: Eq a => a -> a -> Bool
 ehIgual x y = x == y
 
-show :: Show t => t -> String
+{- show :: Show t => t -> String
 
-read :: (Read t) => String -> t
+read :: (Read t) => String -> t -}
 
-(+) :: Num a => a -> a -> a
+{- (+) :: Num a => a -> a -> a
 
-(>) :: Ord a => a -> a -> Bool
+(>) :: Ord a => a -> a -> Bool -}
