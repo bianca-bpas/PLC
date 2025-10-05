@@ -1,7 +1,11 @@
+type GrupoMes = (String, [Double])
+
 split :: String -> Char -> [String]
 split [] _ = []
 split (a:b) c
-    | a /= c = ([a] ++ head (split b c)) : tail (split b c)
+    | a /= c = case split b c of
+        [] -> [[a]]
+        (x:xs) -> (a:x) : xs
     | otherwise = [] : (split b c)
 
 onlyValid :: String -> Bool
@@ -14,9 +18,9 @@ values fatura = [x | x <- (split fatura ';'), onlyValid x]
 converterParaDouble :: [String] -> [Double]
 converterParaDouble = map read
 
-minMaxCartao :: String -> (Double, Double)
-minMaxCartao f = (minimum listaValores, maximum listaValores)
-    where listaValores = converterParaDouble (values f)
+
+logMes :: String -> String -> Double
+
 
 main = do
     a <- getLine
