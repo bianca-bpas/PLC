@@ -1,5 +1,3 @@
-type GrupoMes = (String, [Double])
-
 split :: String -> Char -> [String]
 split [] _ = []
 split (a:b) c
@@ -8,21 +6,37 @@ split (a:b) c
         (x:xs) -> (a:x) : xs
     | otherwise = [] : (split b c)
 
-onlyValid :: String -> Bool
-onlyValid str = all valid str
-    where valid c = c == '.' || (c >= '0' && c <= '9')
+percorreFatura :: [String] -> [[String]]
+percorreFatura [] = []
+percorreFatura (a:b:c:resto) = [a, b, c] : percorreFatura resto
 
-values :: String -> [String]
-values fatura = [x | x <- (split fatura ';'), onlyValid x]
+identificaMes :: [[String]] -> [(String, String)]
+identificaMes [] = []
+identificaMes ([a, b, c]:as) = (a, c) : identificaMes as
 
-converterParaDouble :: [String] -> [Double]
-converterParaDouble = map read
+agrupaMes :: [(String, String)] -> [[(String, String)]]
+agrupaMes [] = []
+agrupaMes (a:as) = (a : (filter (\s -> mes a == mes s) as)) : agrupaMes (filter (\s -> mes a /= mes s) as)
 
+mes :: (String, String) -> String
+mes (a, b) = reverse (take 3 (reverse a))
+
+faturasMes :: [[(String, String)]] -> [(String, [Double])]
+faturasMes [] = []
+faturasMes (a:as) = (fatura a) : faturasMes as
+
+valor :: (String, String) -> Double
+valor (a, b) = read b
+
+fatura :: [(String, String)] -> (String, [Double])
+fatura (a:b) = (mes a, valor a : map valor b)
 
 logMes :: String -> String -> Double
-
+logMes consulta str = sum (snd (head f))
+    where f = filter (\(m, valores) -> consulta == m) (faturasMes (agrupaMes (identificaMes (percorreFatura (split str ';')))))
 
 main = do
     a <- getLine
-    let result = minMaxCartao a
+    b <- getLine
+    let result = logMes a b
     print result
