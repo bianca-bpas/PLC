@@ -3,4 +3,5 @@ areaTriangulo :: Int -> Int -> Int -> Double
 areaTriangulo a b c = (c*h)/2
     where
         h = b * sinAlpha
-        sinAlpha = 
+        sinAlpha = sqrt (1 - cosAlpha ^ 2)
+        cosAlpha = (b ^ 2 + c ^ 2 - a ^ 2) / (2 * b * c)
